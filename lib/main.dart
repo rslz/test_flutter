@@ -1,3 +1,6 @@
+
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 void main() => runApp(new MyApp());
@@ -66,13 +69,36 @@ class RandomWordsState extends State<RandomWords> {
         color: alreadySaved ? Colors.red : null,
       ),
       onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
-          }
-        });
+        showCupertinoDialog(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: const Text('Alert'),
+              content: const Text('Save?'),
+              actions: <CupertinoDialogAction>[
+                CupertinoDialogAction(
+                    child: const Text('No'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                ),
+                CupertinoDialogAction(
+                  child: const Text('Yes'),
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    setState(() {
+                      if (alreadySaved) {
+                        _saved.remove(pair);
+                      } else {
+                        _saved.add(pair);
+                      }
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+        );
+
       },
     );
   }
@@ -108,7 +134,4 @@ class RandomWordsState extends State<RandomWords> {
       ),
     );
   }
-
-
-
 }
